@@ -1,4 +1,4 @@
-import { useState, useReducer } from "react";
+import { useState, useReducer, useContext } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -9,6 +9,10 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
+
+import { AuthContext } from "../App";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -57,6 +61,10 @@ export default function SignIn() {
     password: "",
   });
 
+  const context = useContext(AuthContext);
+
+  const history = useHistory();
+
   function switchModeHandler(): void {
     setIsLoginMode((prevMode) => !prevMode);
   }
@@ -69,9 +77,16 @@ export default function SignIn() {
     });
   }
 
-  function onSubmitHandler(e: React.SyntheticEvent) {
+  async function onSubmitHandler(e: React.SyntheticEvent) {
     e.preventDefault();
-    console.log({ email, password });
+    try {
+      const formData = new FormData();
+      formData.append("email", email);
+      formData.append("password", password);
+      //const responseData = await axios.post("url...", formData);
+      context.login();
+      history.replace("/user");
+    } catch (err) {}
   }
 
   return (
