@@ -11,8 +11,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-
 import { AuthContext } from "../App";
+import Modal from '@material-ui/core/Modal';
+import Fade from '@material-ui/core/Fade';
+import Backdrop from '@material-ui/core/Backdrop';
+import CancelIcon from '@material-ui/icons/Cancel';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -20,6 +23,18 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+  },
+  paper1: {
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+    textAlign:'center'
+  },
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   avatar: {
     margin: theme.spacing(1),
@@ -61,6 +76,14 @@ export default function SignIn() {
     password: "",
   });
 
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const context = useContext(AuthContext);
 
   const history = useHistory();
@@ -86,7 +109,9 @@ export default function SignIn() {
       //const responseData = await axios.post("url...", formData);
       context.login();
       history.replace("/user");
-    } catch (err) {}
+    } catch (err) {
+      handleOpen();
+      }
   }
 
   return (
@@ -137,6 +162,25 @@ export default function SignIn() {
             </Grid>
           </Grid>
         </form>
+        <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={open}>
+          <div className={classes.paper1}>
+            <CancelIcon style={{ color: "red",fontSize : "70px"}} onClick={handleClose}></CancelIcon> <h2 id="transition-modal-title">Error</h2>
+            <p id="transition-modal-description">Something went wrong</p>
+          </div>
+        </Fade>
+      </Modal>
       </div>
     </Container>
   );
