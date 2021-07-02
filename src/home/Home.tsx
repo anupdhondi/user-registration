@@ -37,14 +37,20 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(6),
   },
+  paper: {
+    marginTop: theme.spacing(8),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
 }));
 
-export default function Album() {
+export default function Home() {
   const classes = useStyles();
   const history = useHistory();
   return (
     <React.Fragment>
-      <main>
+      <main className={classes.paper}>
         <div className={classes.heroContent}>
           <Container maxWidth="sm">
             <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
@@ -57,7 +63,7 @@ export default function Album() {
               <Grid container spacing={2} justify="center">
                 <Grid item>
                   <Button variant="contained" color="primary" onClick={() => history.push("/login")}>
-                    Login
+                    Login / SignUp
                   </Button>
                 </Grid>
               </Grid>
